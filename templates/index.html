@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which bin? | Waste Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#2b6cb0">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="app-title">Which bin?</h1>
+      <p class="app-subtitle">Snap or upload a photo of waste to find the right recycling or disposal bin.</p>
+    </header>
+<button id="install-btn" class="btn btn-primary" hidden>Install App</button>
+
+    <main class="main-content">
+      <!-- Error Box -->
+      <div id="error-box" class="error-box" role="alert" aria-live="assertive" hidden>
+        <div class="error-icon" aria-hidden="true">&#9888;</div>
+        <div class="error-text" id="error-message"></div>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-mode-tabs">
+        <button type="button" id="single-mode-btn" class="mode-btn active">Single Image</button>
+        <button type="button" id="bulk-mode-btn" class="mode-btn">Bulk Upload</button>
+      </div>
+      <section class="upload-section" aria-label="Image upload and preview">
+        <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Drop photo here or browse to choose">
+          <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden>
+          
+          <div id="drop-zone-prompt" class="drop-prompt">
+            <svg class="upload-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p class="drop-text-primary"><strong>Choose an image</strong> or drag & drop here</p>
+            <p class="drop-text-secondary">Supports JPG, PNG, WebP (Max 8 MB)</p>
+          </div>
+
+          <div id="preview-wrapper" class="preview-wrapper" hidden>
+            <img id="image-preview" class="image-preview" alt="Preview of selected waste item">
+            <button type="button" id="remove-btn" class="remove-btn" aria-label="Remove image">&times;</button>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <button type="button" id="analyze-btn" class="btn btn-primary" disabled>
+            <span class="btn-text">Analyze Waste Item</span>
+            <span class="btn-spinner" aria-hidden="true" hidden></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Result Panel -->
+      <section id="result-panel" class="result-panel" aria-live="polite" hidden>
+        <!-- Confident Result State -->
+        <div id="result-confident" class="result-card">
+          <div class="result-header">
+            <span class="badge" id="category-badge">Identified</span>
+            <span class="confidence-tag" id="confidence-tag">95% match</span>
+          </div>
+
+          <div class="bin-banner" id="bin-banner">
+            <div class="bin-icon" aria-hidden="true">&#9851;</div>
+            <div class="bin-details">
+              <span class="bin-label">Target Bin</span>
+              <h2 class="bin-name" id="bin-name">Plastic recycling</h2>
+            </div>
+          </div>
+
+          <div class="tip-card" id="tip-card">
+            <h3 class="tip-title">Disposal Tip</h3>
+            <p class="tip-body" id="disposal-tip">Empty and rinse. Check the number on the base against local rules.</p>
+          </div>
+        </div>
+
+        <!-- Uncertain Result State -->
+        <div id="result-uncertain" class="uncertain-card" hidden>
+          <div class="uncertain-icon" aria-hidden="true">&#10067;</div>
+          <h2 class="uncertain-title">Not Sure About This Item</h2>
+          <p class="uncertain-text">
+            Our classifier confidence was below 50%. We cannot reliably recommend a bin for this photo.
+          </p>
+          <div class="advice-box">
+            <h3>Photo-Taking Advice:</h3>
+            <ul>
+              <li>Place item on a plain, well-lit background.</li>
+              <li>Photograph only one item at a time.</li>
+              <li>Avoid blur and harsh reflections.</li>
+              <li>Ensure the entire item is visible within the frame.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Probability Breakdown -->
+        <div class="breakdown-card">
+          <h3 class="breakdown-title">Class Probabilities</h3>
+          <div id="probability-list" class="probability-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Waste Classifier ("Which bin?") &bull; Local AI Transfer Learning System</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
